@@ -97,7 +97,7 @@ class Instructor:
                 # clear gradient accumulators
                 optimizer.zero_grad()
 
-                inputs = [sample_batched[col].to(self.opt.device) for col in self.opt.inputs_cols]
+                inputs = [sample_batched[col].to(self.opt.device) for col in self.opt.model_inputs]
                 outputs = self.model(inputs)
                 targets = sample_batched['polarity'].to(self.opt.device)
 
@@ -134,7 +134,7 @@ class Instructor:
         self.model.eval()
         with torch.no_grad():
             for t_batch, t_sample_batched in enumerate(data_loader):
-                t_inputs = [t_sample_batched[col].to(self.opt.device) for col in self.opt.inputs_cols]
+                t_inputs = [t_sample_batched[col].to(self.opt.device) for col in self.opt.model_inputs]
                 t_targets = t_sample_batched['polarity'].to(self.opt.device)
                 t_outputs = self.model(t_inputs)
 
@@ -286,7 +286,7 @@ def main():
     }
     opt.model_class = model_classes[opt.model_name]
     opt.dataset_file = dataset_files[opt.dataset]
-    opt.inputs_cols = input_colses[opt.model_name]
+    opt.model_inputs = input_colses[opt.model_name]
     opt.initializer = initializers[opt.initializer]
     opt.optimizer = optimizers[opt.optimizer]
     opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') \
