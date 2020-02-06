@@ -31,8 +31,11 @@ def main():
     opt.model_inputs = config['model_inputs'][opt.model_name]
     opt.initializer = initializers[opt.initializer]
     opt.optimizer = optimizers[opt.optimizer]
-    opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') \
-        if opt.device is None else torch.device(opt.device)
+
+    device = opt.device
+    if device is None:
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    opt.device = torch.device(device)
 
     runner = ModelRunner(opt)
     runner.run()
