@@ -2,36 +2,36 @@
 # file: train.py
 # author: songyouwei <youwei0314@gmail.com>
 # Copyright (C) 2018. All Rights Reserved.
-import random
-from argparser import ArgParser
-
-import numpy
 import torch
-from yaml import load
-from zoo import models, optimizers, initializers
+
+from helpers.argparser import ArgParser
+from helpers.seeder import Seeder
 from model_runner import ModelRunner
+from yaml import load
+from zoo import initializers, models, optimizers
 
 with open('config.yml', 'r') as f:
     config = load(f)
 
 
 def main():
+    # get hyperparameters from input args
     opt = ArgParser().get_options()
-    # Hyper Parameters
-    if opt.seed is not None:
-        random.seed(opt.seed)
-        numpy.random.seed(opt.seed)
-        torch.manual_seed(opt.seed)
-        torch.cuda.manual_seed(opt.seed)
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
 
+    # deterministic seed across numpy, torch and cuda
+    # store as variable due to garbage collecting
+    seeder = Seeder(opt.seed)
+    seeder.activate()
+
+    # data from ./zoo.py
     opt.model_class = models[opt.model_name]
-    opt.dataset_file = config['datasets'][opt.dataset]
-    opt.model_inputs = config['model_inputs'][opt.model_name]
     opt.initializer = initializers[opt.initializer]
     opt.optimizer = optimizers[opt.optimizer]
+    # data from ./config.yml
+    opt.dataset_file = config['datasets'][opt.dataset]
+    opt.model_inputs = config['model_inputs'][opt.model_name]
 
+    # run on gpu if available
     device = opt.device
     if device is None:
         device = 'cuda' if torch.cuda.is_available() else 'cpu'

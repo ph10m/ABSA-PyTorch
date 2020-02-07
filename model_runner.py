@@ -1,6 +1,6 @@
 import math
 import os
-from logger import Logger
+from helpers.logger import Logger
 
 import torch
 import torch.nn as nn
@@ -15,8 +15,7 @@ from data_utils import (ABSADataset, Tokenizer4Bert, build_embedding_matrix,
 class ModelRunner:
     def __init__(self, opt):
         self.opt = opt
-        self.logger = Logger(opt.model_name, opt.dataset).get_logger()
-
+        self.logger = Logger(opt.model_name, opt.dataset)
 
         if 'bert' in opt.model_name:
             tokenizer = Tokenizer4Bert(
@@ -45,7 +44,7 @@ class ModelRunner:
             self.valset = self.testset
 
         if opt.device.type == 'cuda':
-            self.logger.info('cuda memory allocated: {}'.format(torch.cuda.memory_allocated(device=opt.device.index)))
+            self.logger.log('cuda memory allocated: {}'.format(torch.cuda.memory_allocated(device=opt.device.index)))
         self._print_args()
 
     def _print_args(self):
@@ -56,10 +55,10 @@ class ModelRunner:
                 n_trainable_params += n_params
             else:
                 n_nontrainable_params += n_params
-        self.logger.info('n_trainable_params: {0}, n_nontrainable_params: {1}'.format(n_trainable_params, n_nontrainable_params))
-        self.logger.info('> training arguments:')
+        self.logger.log('n_trainable_params: {0}, n_nontrainable_params: {1}'.format(n_trainable_params, n_nontrainable_params))
+        self.logger.log('> training arguments:')
         for arg in vars(self.opt):
-            self.logger.info('>>> {0}: {1}'.format(arg, getattr(self.opt, arg)))
+            self.logger.log('>>> {0}: {1}'.format(arg, getattr(self.opt, arg)))
 
     def _reset_params(self):
         for child in self.model.children():
@@ -78,8 +77,8 @@ class ModelRunner:
         global_step = 0
         path = None
         for epoch in range(self.opt.num_epoch):
-            self.logger.info('>' * 100)
-            self.logger.info('epoch: {}'.format(epoch))
+            self.logger.log('>' * 100)
+            self.logger.log('epoch: {}'.format(epoch))
             n_correct, n_total, loss_total = 0, 0, 0
             # switch model to training mode
             self.model.train()
@@ -102,17 +101,17 @@ class ModelRunner:
                 if global_step % self.opt.log_step == 0:
                     train_acc = n_correct / n_total
                     train_loss = loss_total / n_total
-                    self.logger.info('loss: {:.4f}, acc: {:.4f}'.format(train_loss, train_acc))
+                    self.logger.log('loss: {:.4f}, acc: {:.4f}'.format(train_loss, train_acc))
 
             val_acc, val_f1 = self._evaluate_acc_f1(val_data_loader)
-            self.logger.info('> val_acc: {:.4f}, val_f1: {:.4f}'.format(val_acc, val_f1))
+            self.logger.log('> val_acc: {:.4f}, val_f1: {:.4f}'.format(val_acc, val_f1))
             if val_acc > max_val_acc:
                 max_val_acc = val_acc
                 if not os.path.exists('state_dict'):
                     os.mkdir('state_dict')
                 path = 'state_dict/{0}_{1}_val_acc{2}'.format(self.opt.model_name, self.opt.dataset, round(val_acc, 4))
                 torch.save(self.model.state_dict(), path)
-                self.logger.info('>> saved: {}'.format(path))
+                self.logger.log('>> saved: {}'.format(path))
             if val_f1 > max_val_f1:
                 max_val_f1 = val_f1
 
@@ -158,4 +157,4 @@ class ModelRunner:
         self.model.load_state_dict(torch.load(best_model_path))
         self.model.eval()
         test_acc, test_f1 = self._evaluate_acc_f1(test_data_loader)
-        self.logger.info('>> test_acc: {:.4f}, test_f1: {:.4f}'.format(test_acc, test_f1))
+        self.logger.log('>> test_acc: {:.4f}, test_f1: {:.4f}'.format(test_acc, test_f1))
