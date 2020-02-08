@@ -4,12 +4,13 @@ from helpers.logger import Logger
 
 import torch
 import torch.nn as nn
-from pytorch_transformers import BertModel
+from transformers import BertModel
+from transformers import AlbertModel
 from sklearn import metrics
 from torch.utils.data import DataLoader, random_split
 
-from data_utils import (ABSADataset, Tokenizer4Bert, build_embedding_matrix,
-                        build_tokenizer)
+from data_utils import ABSADataset, Tokenizer4Bert, Tokenizer4Albert
+from data_utils import build_embedding_matrix, build_tokenizer
 
 
 class ModelRunner:
@@ -17,12 +18,22 @@ class ModelRunner:
         self.opt = opt
         self.logger = Logger(opt.model_name, opt.dataset)
 
-        if 'bert' in opt.model_name:
+        if 'albert' in opt.model_name:
+            tokenizer = Tokenizer4Albert(
+                opt.max_seq_len,
+                opt.pretrained_name
+            )
+            # see transformers/tokenization_utils/pretrainedtokenizer
+            albert = AlbertModel.from_pretrained(opt.pretrained_name)
+            self.model = opt.model_class(albert, opt).to(opt.device)
+
+        elif 'bert' in opt.model_name:
             tokenizer = Tokenizer4Bert(
                 opt.max_seq_len,
-                opt.pretrained_bert_name)
-            bert = BertModel.from_pretrained(opt.pretrained_bert_name)
+                opt.pretrained_name)
+            bert = BertModel.from_pretrained(opt.pretrained_name)
             self.model = opt.model_class(bert, opt).to(opt.device)
+
         else:
             tokenizer = build_tokenizer(
                 fnames=[opt.dataset_file['train'], opt.dataset_file['test']],

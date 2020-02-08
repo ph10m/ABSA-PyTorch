@@ -10,3 +10,4 @@ from models.aen import AEN_BERT
 from models.td_lstm import TD_LSTM
 from models.tnet_lf import TNet_LF
 from models.lcf_bert import LCF_BERT
+from models.lcf_albert import LCF_ALBERT

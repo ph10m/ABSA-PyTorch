@@ -34,8 +34,8 @@ class Instructor:
         self.opt = opt
 
         if 'bert' in opt.model_name:
-            tokenizer = Tokenizer4Bert(opt.max_seq_len, opt.pretrained_bert_name)
-            bert = BertModel.from_pretrained(opt.pretrained_bert_name)
+            tokenizer = Tokenizer4Bert(opt.max_seq_len, opt.pretrained_name)
+            bert = BertModel.from_pretrained(opt.pretrained_name)
             self.pretrained_bert_state_dict = bert.state_dict()
             self.model = opt.model_class(bert, opt).to(opt.device)
         else:
@@ -201,7 +201,7 @@ def main():
     parser.add_argument('--embed_dim', default=300, type=int)
     parser.add_argument('--hidden_dim', default=300, type=int)
     parser.add_argument('--bert_dim', default=768, type=int)
-    parser.add_argument('--pretrained_bert_name', default='bert-base-uncased', type=str)
+    parser.add_argument('--pretrained_name', default='bert-base-uncased', type=str)
     parser.add_argument('--max_seq_len', default=80, type=int)
     parser.add_argument('--polarities_dim', default=3, type=int)
     parser.add_argument('--hops', default=3, type=int)

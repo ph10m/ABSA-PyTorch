@@ -5,7 +5,7 @@ class ArgParser:
     def __init__(self):
         self.parser = argparse.ArgumentParser()
 
-        self.add('model_name', 'lcf_bert', str)
+        self.add('model_name', 'lcf_albert', str)
 
         self.add('dataset', 'twitter', str,
                  'twitter, restaurant, laptop')
@@ -33,7 +33,7 @@ class ArgParser:
 
         self.add('bert_dim', 768, int)
 
-        self.add('pretrained_bert_name', 'bert-base-uncased', str)
+        self.add('pretrained_name', 'albert-base-v2', str)
 
         self.add('max_seq_len', 80, int)
 

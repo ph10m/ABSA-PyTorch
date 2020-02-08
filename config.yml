@@ -23,6 +23,11 @@ model_inputs:
   - bert_segments_ids
   - text_raw_bert_indices
   - aspect_bert_indices
+  lcf_albert: 
+  - text_bert_indices
+  - bert_segments_ids
+  - text_raw_bert_indices
+  - aspect_bert_indices
 
 datasets:
   twitter:

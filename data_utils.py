@@ -9,6 +9,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 from pytorch_transformers import BertTokenizer
+from transformers import AlbertTokenizer
 
 
 def build_tokenizer(fnames, max_seq_len, dat_fname):
@@ -107,9 +108,23 @@ class Tokenizer(object):
         return pad_and_truncate(sequence, self.max_seq_len, padding=padding, truncating=truncating)
 
 
+class Tokenizer4Albert:
+    def __init__(self, max_seq_len, pretrained_name):
+        self.tokenizer = AlbertTokenizer.from_pretrained(pretrained_name)
+        self.max_seq_len = max_seq_len
+
+    def text_to_sequence(self, text, reverse=False, padding='post', truncating='post'):
+        sequence = self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(text))
+        if len(sequence) == 0:
+            sequence = [0]
+        if reverse:
+            sequence = sequence[::-1]
+        return pad_and_truncate(sequence, self.max_seq_len, padding=padding, truncating=truncating)
+
+
 class Tokenizer4Bert:
-    def __init__(self, max_seq_len, pretrained_bert_name):
-        self.tokenizer = BertTokenizer.from_pretrained(pretrained_bert_name)
+    def __init__(self, max_seq_len, pretrained_name):
+        self.tokenizer = BertTokenizer.from_pretrained(pretrained_name)
         self.max_seq_len = max_seq_len
 
     def text_to_sequence(self, text, reverse=False, padding='post', truncating='post'):
