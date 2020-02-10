@@ -21,7 +21,7 @@ class ArgParser:
 
         self.add('l2reg', 0.01, float)
 
-        self.add('num_epoch', 3, int, 'try larger number for non-BERT models')
+        self.add('num_epoch', 10, int, 'try larger number for non-BERT models')
 
         self.add('batch_size', 16, int, 'try 16, 32, 64 for BERT models')
 

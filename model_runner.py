@@ -4,7 +4,7 @@ from helpers.logger import Logger
 
 import torch
 import torch.nn as nn
-from pytorch_transformers import BertModel
+from transformers import BertModel
 from sklearn import metrics
 from torch.utils.data import DataLoader, random_split
 
