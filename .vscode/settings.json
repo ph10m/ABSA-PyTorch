@@ -2,5 +2,5 @@
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
-  "python.pythonPath": "venv/bin/python3.7"
+  "python.pythonPath": "C:\\Users\\Tollef\\Anaconda3\\envs\\torch\\python.exe"
 }
