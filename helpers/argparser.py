@@ -14,14 +14,14 @@ class ArgParser:
 
         self.add('initializer', 'xavier_uniform_', str)
 
-        self.add('learning_rate', 5e-5, float,
+        self.add('learning_rate', 2e-5, float,
                  'try 5e-5, 2e-5 for BERT, 1e-3 for others')
 
-        self.add('dropout', 0.1, float)
+        self.add('dropout', 0.05, float)
 
-        self.add('l2reg', 0.01, float)
+        self.add('l2reg', 0.00001, float)
 
-        self.add('num_epoch', 10, int, 'try larger number for non-BERT models')
+        self.add('num_epoch', 5, int, 'try larger number for non-BERT models')
 
         self.add('batch_size', 16, int, 'try 16, 32, 64 for BERT models')
 
