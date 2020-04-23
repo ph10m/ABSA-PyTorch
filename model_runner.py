@@ -76,8 +76,12 @@ class ModelRunner:
         max_val_f1 = 0
         global_step = 0
         path = None
+
+        tmp_best_model = None
+        best_path = None
+
         for epoch in range(self.opt.num_epoch):
-            self.logger.log('>' * 100)
+            # self.logger.log('>' * 100)
             self.logger.log('epoch: {}'.format(epoch))
             n_correct, n_total, loss_total = 0, 0, 0
             # switch model to training mode
@@ -101,7 +105,7 @@ class ModelRunner:
                 if global_step % self.opt.log_step == 0:
                     train_acc = n_correct / n_total
                     train_loss = loss_total / n_total
-                    self.logger.log('loss: {:.4f}, acc: {:.4f}'.format(train_loss, train_acc))
+                    # self.logger.log('loss: {:.4f}, acc: {:.4f}'.format(train_loss, train_acc))
 
             val_acc, val_f1 = self._evaluate_acc_f1(val_data_loader)
             self.logger.log('> val_acc: {:.4f}, val_f1: {:.4f}'.format(val_acc, val_f1))
@@ -109,13 +113,19 @@ class ModelRunner:
                 max_val_acc = val_acc
                 if not os.path.exists('state_dict'):
                     os.mkdir('state_dict')
-                path = 'state_dict/{0}_{1}_val_acc{2}'.format(self.opt.model_name, self.opt.dataset, round(val_acc, 4))
-                torch.save(self.model.state_dict(), path)
-                self.logger.log('>> saved: {}'.format(path))
+
+                best_path = 'state_dict/{0}_{1}_val_acc{2}_val_f{3}.tmp'.format(self.opt.model_name, self.opt.dataset, round(val_acc, 4), round(val_f1, 4))
+                tmp_best_model = self.model.state_dict()
+
             if val_f1 > max_val_f1:
                 max_val_f1 = val_f1
+            
+        # if tmp_best_model:
+        #     torch.save(tmp_best_model, best_path)
+        #     self.logger.log('>> saved: {}'.format(best_path))
 
-        return path
+        #return best_path
+        return tmp_best_model
 
     def _evaluate_acc_f1(self, data_loader):
         n_correct, n_total = 0, 0
@@ -153,8 +163,26 @@ class ModelRunner:
         val_data_loader = DataLoader(dataset=self.valset, batch_size=self.opt.batch_size, shuffle=False)
 
         self._reset_params()
-        best_model_path = self._train(criterion, optimizer, train_data_loader, val_data_loader)
-        self.model.load_state_dict(torch.load(best_model_path))
+        # best_model_path = self._train(criterion, optimizer, train_data_loader, val_data_loader)
+        # self.model.load_state_dict(torch.load(best_model_path))
+
+        # return best state dict
+        best_model = self._train(
+          criterion,
+          optimizer,
+          train_data_loader,
+          val_data_loader
+        )
+        self.model.load_state_dict(best_model)
         self.model.eval()
         test_acc, test_f1 = self._evaluate_acc_f1(test_data_loader)
-        self.logger.log('>> test_acc: {:.4f}, test_f1: {:.4f}'.format(test_acc, test_f1))
+        self.logger.log(
+          '>> test_acc: {:.4f}, test_f1: {:.4f}'.format(test_acc, test_f1)
+        )
+        save_name = 'state_dict/{}_ACC{}_F{}.{}'.format(
+          self.opt.dataset,
+          round(test_acc, 4),
+          round(test_f1, 4),
+          self.opt.model_name
+        )
+        torch.save(self.model.state_dict(), save_name)
