@@ -2,6 +2,7 @@ __pycache__/
 *.dat
 *.h5
 logs/
+logs*/
 glove*
 
 # OSX
@@ -38,3 +39,4 @@ bin/
 gen/
 state_dict/
 venv/
+
