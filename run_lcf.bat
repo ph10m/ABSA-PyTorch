@@ -1,0 +1,4 @@
+python train.py --model_name lcf_bert --dataset restaurant --dropout 0 --l2reg 0.00001 --batch_size 16 --learning_rate 2e-5 --local_context_focus cdm --SRD 3 --num_epoch 3
+python train.py --model_name lcf_bert --dataset restaurant_coref_gold_eval --dropout 0 --l2reg 0.00001 --batch_size 16 --learning_rate 2e-5 --local_context_focus cdm --SRD 3 --num_epoch 3
+python train.py --model_name lcf_bert --dataset restaurant --dropout 0.001 --l2reg 0.00001 --batch_size 16 --learning_rate 2e-5 --local_context_focus cdw --SRD 6 --num_epoch 3
+python train.py --model_name lcf_bert --dataset restaurant_coref_gold_eval --dropout 0.001 --l2reg 0.00001 --batch_size 16 --learning_rate 2e-5 --local_context_focus cdw --SRD 6 --num_epoch 3
