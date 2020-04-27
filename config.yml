@@ -25,21 +25,6 @@ model_inputs:
   - aspect_bert_indices
 
 datasets:
-  strise_neu_twitter:
-    train: ../REPO/dataset/graphql-topic-downloads/filtered/combined_neu.xml.seg
-    test: ./datasets/acl-14-short-data/test.raw
-  strise_neu_rest:
-    train: ../REPO/dataset/graphql-topic-downloads/filtered/combined_neu.xml.seg
-    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
-  strise_neu_laptop:
-    train: ../REPO/dataset/graphql-topic-downloads/filtered/combined_neu.xml.seg
-    test: ./datasets/semeval14/Laptops_Test_Gold.xml.seg
-  strise_neutral:
-    train: ../REPO/dataset/graphql-topic-downloads/filtered/train_neu.xml.seg
-    test: ../REPO/dataset/graphql-topic-downloads/filtered/test_neu.xml.seg
-  strise:
-    train: ../REPO/dataset/graphql-topic-downloads/filtered/train.xml.seg
-    test: ../REPO/dataset/graphql-topic-downloads/filtered/test.xml.seg
   twitter:
     train: ./datasets/acl-14-short-data/train.raw
     test: ./datasets/acl-14-short-data/test.raw
@@ -57,4 +42,13 @@ datasets:
     test: ./datasets/semeval14/Laptops_Test_Gold.xml.seg
   all_combined:
     train: ./datasets/MASS.raw
+    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
+  strise:
+    train: ./datasets/strise/distant_supervision_train.seg
+    test: ./datasets/strise/distant_supervision_test.seg
+  strise_rest:
+    train: ./datasets/strise/distant_supervision_train.seg
+    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
+  testing:
+    train: ./datasets/distant_supervision_test.seg
     test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
