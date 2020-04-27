@@ -43,7 +43,7 @@ class ArgParser:
 
         self.add('device', None, str, 'e.g. cuda:0')
 
-        self.add('seed', 1337, int,
+        self.add('seed', 42, int,
                  'set seed for reproducibility')
 
         self.add('valset_ratio', 0, float,

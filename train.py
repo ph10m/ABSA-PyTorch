@@ -7,11 +7,11 @@ import torch
 from helpers.argparser import ArgParser
 from helpers.seeder import Seeder
 from model_runner import ModelRunner
-from yaml import load
+from yaml import load, FullLoader
 from zoo import initializers, models, optimizers
 
 with open('config.yml', 'r') as f:
-    config = load(f)
+    config = load(f, Loader=FullLoader)
 
 
 def main():

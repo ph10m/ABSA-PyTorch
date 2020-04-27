@@ -105,21 +105,25 @@ class ModelRunner:
                 if global_step % self.opt.log_step == 0:
                     train_acc = n_correct / n_total
                     train_loss = loss_total / n_total
-                    # self.logger.log('loss: {:.4f}, acc: {:.4f}'.format(train_loss, train_acc))
+                    logstr = 'loss: {:.4f}, acc: {:.4f}'.format(
+                      train_loss, train_acc)
+                    print(logstr)
+                    # self.logger.log(logstr)
 
             val_acc, val_f1 = self._evaluate_acc_f1(val_data_loader)
             self.logger.log('> val_acc: {:.4f}, val_f1: {:.4f}'.format(val_acc, val_f1))
-            if val_acc > max_val_acc:
-                max_val_acc = val_acc
+            # if val_acc > max_val_acc:
+                # max_val_acc = val_acc
+            if val_f1 > max_val_f1:
+                max_val_f1 = val_f1
+                self.logger.log("New best model found, F1 = {}".format(
+                  max_val_f1))
                 if not os.path.exists('state_dict'):
                     os.mkdir('state_dict')
 
                 best_path = 'state_dict/{0}_{1}_val_acc{2}_val_f{3}.tmp'.format(self.opt.model_name, self.opt.dataset, round(val_acc, 4), round(val_f1, 4))
                 tmp_best_model = self.model.state_dict()
 
-            if val_f1 > max_val_f1:
-                max_val_f1 = val_f1
-            
         # if tmp_best_model:
         #     torch.save(tmp_best_model, best_path)
         #     self.logger.log('>> saved: {}'.format(best_path))
@@ -185,4 +189,4 @@ class ModelRunner:
           round(test_f1, 4),
           self.opt.model_name
         )
-        torch.save(self.model.state_dict(), save_name)
+        # torch.save(self.model.state_dict(), save_name)
