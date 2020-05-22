@@ -31,24 +31,6 @@ datasets:
   restaurant:
     train: ./datasets/semeval14/Restaurants_Train.xml.seg
     test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
-  restaurant_coref_maintarget:
-    train: ./datasets/semeval14/Restaurants_coref_train_main_target.seg
-    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
-  restaurant_coref_gold_eval:
-    train: ./datasets/semeval14/Restaurants_coref_train.seg
-    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
   laptop:
     train: ./datasets/semeval14/Laptops_Train.xml.seg
     test: ./datasets/semeval14/Laptops_Test_Gold.xml.seg
-  all_combined:
-    train: ./datasets/MASS.raw
-    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
-  strise:
-    train: ./datasets/strise/distant_supervision_train.seg
-    test: ./datasets/strise/distant_supervision_test.seg
-  strise_rest:
-    train: ./datasets/strise/distant_supervision_train.seg
-    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg
-  testing:
-    train: ./datasets/distant_supervision_test.seg
-    test: ./datasets/semeval14/Restaurants_Test_Gold.xml.seg

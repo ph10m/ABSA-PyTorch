@@ -7,8 +7,8 @@ class ArgParser:
 
         self.add('model_name', 'lcf_bert', str)
 
-        self.add('dataset', 'strise', str,
-                 'strise, twitter, restaurant, laptop')
+        self.add('dataset', 'twitter', str,
+                 'twitter, restaurant, laptop')
 
         self.add('optimizer', 'adam', str)
 
